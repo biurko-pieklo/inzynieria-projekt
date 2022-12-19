@@ -33,19 +33,18 @@ class File {
 
     /**
      * Saves file sent by POST
+     * @param $file - file value ($_FILES['inputname'] variable)
      */
-    public function getFromPost(array $post) {
-        $name = $post['name'];
-        $tmp_name = $post['tmp_name'];
+    public function getFromPost(array $file) {
+        $name = $file['name'];
+        $tmp_name = $file['tmp_name'];
 
-        if (is_uploaded_file($tmp_name)) {
-            if (move_uploaded_file($tmp_name, $this->savepath . $name)) {
-                echo "Wysłano plik";
-            } else {
-                echo "Coś się nie udało";
-            }
-        } else {
-            echo "Coś się nie udało";
+        try {
+            $upload = move_uploaded_file($tmp_name, $this->savepath . $name);
+            echo "Wysłano plik";
+            return $upload;
+        } catch(Exception $e) {
+            throw new Exception($e);
         }
     }
 }
