@@ -6,4 +6,5 @@ spl_autoload_register(function($class_name) {
 
 require_once('./theme/parts/header.php');
 require_once('./theme/parts/upload.php');
+require_once('./theme/parts/footer.php');
 ?>
