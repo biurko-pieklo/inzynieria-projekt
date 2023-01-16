@@ -56,4 +56,14 @@ class User {
     private function setPassword(string $password): void {
         $this->password = $password;
     }
+
+    public function verify($conn) {
+        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $this->login . "'";
+
+        if ($result = $conn->query($sql)) {
+            $value = $result->fetch_row()[0];
+        }
+
+        return $this->password == $value;
+    }
 }
