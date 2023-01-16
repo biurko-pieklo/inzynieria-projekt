@@ -57,8 +57,23 @@ class User {
         $this->password = $password;
     }
 
+    public function isExists($conn) {
+        $sql = "SELECT * FROM " . TABLE . " WHERE name = '" . $this->getLogin() . "'";
+
+        if ($result = $conn->query($sql)) {
+            $row = $result->fetch_row();
+
+            if (!$row) {
+                return false;
+            }
+
+            return true;
+        }
+
+    }
+
     public function verify($conn) {
-        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $this->login . "'";
+        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $this->getLogin() . "'";
 
         if ($result = $conn->query($sql)) {
             $row = $result->fetch_row();
@@ -71,5 +86,20 @@ class User {
         }
 
         return $this->password == $value;
+    }
+
+    public function register($conn): RegisterCase {
+        if ($this->isExists($conn)) {
+            return RegisterCase::USER_EXISTS;
+        }
+
+        $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
+            VALUES ( '" . $this->getLogin() . "', '" . $this->getDisplayName() . "', '" . $this->getPassword() . "')";
+
+        if ($conn->query($sql) === TRUE) {
+            return RegisterCase::REGISTERED;
+        }
+
+        return RegisterCase::ERROR;
     }
 }

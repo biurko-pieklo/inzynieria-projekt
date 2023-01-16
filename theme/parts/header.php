@@ -10,7 +10,11 @@ $conn = Database::connect();
 if (isset($_POST['verify'])) {
 
     Session::login($conn);
-    //header("Refresh:0");
+
+}
+if (isset($_POST['register'])) {
+
+    Session::register($conn);
 
 }
 if (isset($_POST['logout'])) {
@@ -27,6 +31,14 @@ if (!Session::isLogged()) {
         <input type="text" name="password" placeholder="Password">
         <input type="hidden" name="verify">
         <button type="submit">Login</button>
+    </form>
+
+    <form action="" method="POST" class="registerform">
+        <input type="text" name="reg_login" placeholder="Login">
+        <input type="text" name="reg_displayname" placeholder="Display Name">
+        <input type="text" name="reg_password" placeholder="Password">
+        <input type="hidden" name="register">
+        <button type="submit">Register</button>
     </form>
 
 <?php 

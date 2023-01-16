@@ -33,6 +33,29 @@ class Session {
             $_SESSION['logged'] = true;
             $_SESSION['user'] = $_POST['login'];
         }
+        Session::clearPost();
+    }
+
+    public static function register($conn): void {
+        if (!isset($_POST['reg_login']) || $_POST['reg_login'] == '' || !isset($_POST['reg_password']) || $_POST['reg_password'] == '') {
+            return;
+        }
+
+        $user = new User($_POST['reg_login'], $_POST['reg_password'], $_POST['reg_displayname']);
+
+        $reg = $user->register($conn);
+
+        switch ($reg) {
+            case RegisterCase::USER_EXISTS:
+                echo "Login '" . $_POST['reg_login'] . "' already taken. Please choose something else.";
+                break;
+            case RegisterCase::ERROR:
+                echo "Sorry, someting went wrong";
+                break;
+            case RegisterCase::REGISTERED:
+                echo "Thank you for registering! You can now log into the system.";
+                break;
+        }
     }
 
     public static function logout(): void {
