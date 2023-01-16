@@ -1,0 +1,12 @@
+:root {
+    --global-margin: 10px;
+}
+
+body {
+    margin: var(--global-margin);
+}
+
+.userdata {
+    position: fixed;
+    right: var(--global-margin);
+}

@@ -22,7 +22,7 @@ if (isset($_POST['logout'])) {
 if (!Session::isLogged()) {
 ?>
 
-    <form action="" method="POST">
+    <form action="" method="POST" class="loginform">
         <input type="text" name="login" placeholder="Login">
         <input type="text" name="password" placeholder="Password">
         <input type="hidden" name="verify">
@@ -36,7 +36,7 @@ die();
 
 ?>
 
-    <div>
+    <div class="userdata">
         <span><?php echo Session::getUser($conn); ?></span>
         <form action="" method="POST">
             <input type="hidden" name="logout">
