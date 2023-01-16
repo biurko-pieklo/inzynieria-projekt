@@ -61,7 +61,13 @@ class User {
         $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $this->login . "'";
 
         if ($result = $conn->query($sql)) {
-            $value = $result->fetch_row()[0];
+            $row = $result->fetch_row();
+
+            if (!$row) {
+                return false;
+            }
+
+            $value = $row[0];
         }
 
         return $this->password == $value;
