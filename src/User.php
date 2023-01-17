@@ -97,7 +97,11 @@ class User {
             VALUES ( '" . $this->getLogin() . "', '" . $this->getDisplayName() . "', '" . $this->getPassword() . "')";
 
         if ($conn->query($sql) === TRUE) {
-            return RegisterCase::REGISTERED;
+            if (Utils::passCheck($this->getPassword())){
+                return RegisterCase::REGISTERED;
+            } else {
+                return RegisterCase::BAD_PASSWORD;
+            }
         }
 
         return RegisterCase::ERROR;

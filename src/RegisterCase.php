@@ -6,4 +6,5 @@ enum RegisterCase {
     case REGISTERED;
     case USER_EXISTS;
     case ERROR;
+    case BAD_PASSWORD;
 }

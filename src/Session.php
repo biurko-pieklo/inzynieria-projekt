@@ -48,6 +48,9 @@ class Session {
             case RegisterCase::USER_EXISTS:
                 echo "Login '" . $_POST['reg_login'] . "' already taken. Please choose something else.";
                 break;
+            case RegisterCase::BAD_PASSWORD:
+                echo "Your password is not strong enough (at least 8 characters, one letter, one digit and one special)";
+                break;
             case RegisterCase::ERROR:
                 echo "Sorry, someting went wrong";
                 break;
