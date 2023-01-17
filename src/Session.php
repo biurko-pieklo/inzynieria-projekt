@@ -33,7 +33,6 @@ class Session {
             $_SESSION['logged'] = true;
             $_SESSION['user'] = $_POST['login'];
         }
-        Session::clearPost();
     }
 
     public static function register($conn): void {

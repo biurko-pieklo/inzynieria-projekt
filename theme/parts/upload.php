@@ -1,7 +1,6 @@
 <?php
 
 if (isset($_FILES['file'])) {
-    print_r($_FILES['file']);
     $file = new File($_FILES['file']['name']);
     $file->getFromPost($_FILES['file']);
 }
