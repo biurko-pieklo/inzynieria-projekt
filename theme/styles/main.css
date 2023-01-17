@@ -10,3 +10,35 @@ body {
     position: fixed;
     right: var(--global-margin);
 }
+
+.form {
+    width: 500px;
+    max-width: 100%;
+
+    margin: auto;
+}
+
+.form:not(:first-child) {
+    display: none;
+}
+
+.form-swap {
+    cursor: pointer;
+}
+
+.form-swap:hover {
+    text-decoration: underline;
+}
+
+.loginform,
+.registerform {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+
+:is(.loginform, .registerform) > * {
+    width: 100%;
+}
