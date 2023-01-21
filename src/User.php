@@ -96,10 +96,14 @@ class User {
         $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
             VALUES ( '" . $this->getLogin() . "', '" . $this->getDisplayName() . "', '" . $this->getPassword() . "')";
 
-        if ($conn->query($sql) === TRUE) {
             if (Utils::passCheck($this->getPassword())){
+            if ($conn->query($sql) === TRUE) {
                 return RegisterCase::REGISTERED;
             } else {
+                return RegisterCase::ERROR;
+            }
+        } 
+
                 return RegisterCase::BAD_PASSWORD;
             }
         }
