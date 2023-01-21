@@ -26,7 +26,8 @@ class Utils {
         $files = self::getFiles($dir);
 
         foreach($files as $file) {
-            echo '<a href="' . $dir . $file . '">' . $file . '</a><br>';
+            $ext = pathinfo($file, PATHINFO_EXTENSION) ? pathinfo($file, PATHINFO_EXTENSION) : 'other';
+            echo '<a class="file" data-type="' . $ext . '" href="' . $dir . $file . '">' . $file . '</a>';
         }
     }
 
