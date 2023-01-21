@@ -3,6 +3,7 @@
 if (isset($_FILES['file'])) {
     $file = new File($_FILES['file']['name']);
     $file->getFromPost($_FILES['file']);
+    header('Location: .');
 }
 
 ?>

@@ -21,7 +21,7 @@ class File {
      * Returns path to the file
      */
     public function getPath(): string {
-        return $this->path;
+        return $this->filepath;
     }
 
     /**
@@ -36,15 +36,25 @@ class File {
      * @param $file - file value ($_FILES['inputname'] variable)
      */
     public function getFromPost(array $file) {
-        $name = $file['name'];
-        $tmp_name = $file['tmp_name'];
-
         try {
-            $upload = move_uploaded_file($tmp_name, $this->savepath . $name);
+            $upload = move_uploaded_file($file['tmp_name'], $this->savepath . $this->diffName($file['name'], 1));
             echo "Wysłano plik";
             return $upload;
         } catch(Exception $e) {
             throw new Exception($e);
+        }
+    }
+
+    /**
+     * Sets different name for file if a file with the same name exists
+     * @param $name - this is the name function checks
+     * @param $filenr - number added to file name 
+     */
+    private function diffName(string $name, int $filenr) {
+        if (!file_exists($this->savepath . $name)) {
+            return $name;
+        } else {
+            return $this->diffName(pathinfo($this->getName(), PATHINFO_FILENAME) . ' (' . $filenr . ').' . pathinfo($this->getName(), PATHINFO_EXTENSION), ++$filenr);
         }
     }
 }
