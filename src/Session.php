@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 class Session {
+    /**
+     * Check if user is logged to session
+     */
     public static function isLogged() {
         if (isset($_SESSION['logged'])) {
             return $_SESSION['logged'];
@@ -11,18 +14,22 @@ class Session {
         }
     }
 
-    public static function getUser($conn) {
+    /**
+     * Get display name of currently logged user
+     */
+    public static function getCurrentUserDisplayName(mysqli $conn): string {
         $sql = "SELECT displayname FROM users WHERE name = '" . $_SESSION['user'] . "'";
 
         if ($result = $conn->query($sql)) {
             $value = $result->fetch_row()[0];
             return $value;
         }
-
-        return null;
     }
 
-    public static function login($conn): void {
+    /**
+     * Log the user in
+     */
+    public static function login(mysqli $conn): void {
         if (!isset($_POST['login']) || $_POST['login'] == '' || !isset($_POST['password']) || $_POST['password'] == '') {
             return;
         }
@@ -32,9 +39,13 @@ class Session {
         if ($user->verify($conn)) {
             $_SESSION['logged'] = true;
             $_SESSION['user'] = $_POST['login'];
+            header('Location: .');
         }
     }
 
+    /**
+     * Register a new user
+     */
     public static function register($conn): void {
         if (!isset($_POST['reg_login']) || $_POST['reg_login'] == '' || !isset($_POST['reg_password']) || $_POST['reg_password'] == '') {
             return;
@@ -60,6 +71,9 @@ class Session {
         }
     }
 
+    /**
+     * Log the user out
+     */
     public static function logout(): void {
         unset($_SESSION['logged']);
         unset($_SESSION['user']);

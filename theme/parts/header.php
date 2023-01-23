@@ -57,7 +57,7 @@ die();
 ?>
 
     <div class="userdata">
-        <span><?php echo Session::getUser($conn); ?></span>
+        <span><?php echo Session::getCurrentUserDisplayName($conn); ?></span>
         <form action="" method="POST">
             <input type="hidden" name="logout">
             <button type="submit">Logout</button>

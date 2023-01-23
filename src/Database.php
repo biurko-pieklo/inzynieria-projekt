@@ -8,7 +8,10 @@ CONST PASS = 'Julka';
 CONST DB = 'projekt';
 
 class Database {
-    public static function connect() {
+    /**
+     * Connect to database
+     */
+    public static function connect(): mysqli {
 
         try {
 
