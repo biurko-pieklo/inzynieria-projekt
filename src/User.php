@@ -96,7 +96,7 @@ class User {
         $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
             VALUES ( '" . $this->getLogin() . "', '" . $this->getDisplayName() . "', '" . $this->getPassword() . "')";
 
-            if (Utils::passCheck($this->getPassword())){
+        if (Utils::passCheck($this->getPassword())){
             if ($conn->query($sql) === TRUE) {
                 return RegisterCase::REGISTERED;
             } else {
@@ -104,10 +104,19 @@ class User {
             }
         } 
 
-                return RegisterCase::BAD_PASSWORD;
-            }
-        }
+        return RegisterCase::BAD_PASSWORD;
+    }
 
-        return RegisterCase::ERROR;
+    public static function printAllJSON($conn) {
+        $sql = "SELECT * FROM " . TABLE;
+
+        if ($result = $conn->query($sql)) {
+            $rows = $result->fetch_all(MYSQLI_ASSOC);
+
+            if (!$rows) {
+                return;
+            }
+            return json_encode($rows);
+        }
     }
 }
