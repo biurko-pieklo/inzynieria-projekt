@@ -1,6 +1,3 @@
-<?php
-?>
-
 <div class="module-toggle" data-module-toggle="module-filelist">
     <b>List of files<b>
 </div>
