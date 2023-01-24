@@ -55,4 +55,26 @@ a:visited {
 
 .file {
     display: block;
+    width: fit-content;
+    min-width: 200px;
+}
+
+.file:hover::after {
+    content: '<-';
+}
+
+.module {
+    margin: 10px 0 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #fff;
+}
+
+.module-toggle {
+    font-size: 30px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.module-toggle:hover {
+    text-decoration: underline;
 }

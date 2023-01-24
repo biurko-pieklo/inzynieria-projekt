@@ -1,4 +1,13 @@
 $(document).ready(() => {
+    let $modules = $('.module');
+    let $module_togglers = $('.module-toggle');
+
+    $module_togglers.each((ix, el) => {
+        $(el).on('click', () => {
+            $modules.filter((ix_m, el_m) => $(el).data('module-toggle') == $(el_m).data('module')).slideToggle()
+        });
+    });
+
     let $forms = $('.form');
 
     $forms.each((ix, el) => {

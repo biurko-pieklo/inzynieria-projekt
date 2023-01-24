@@ -8,7 +8,10 @@ if (isset($_FILES['file'])) {
 
 ?>
 
-<div class="module module-upload">
+<div class="module-toggle" data-module-toggle="module-upload">
+    <b>Upload files<b>
+</div>
+<div class="module" data-module="module-upload">
     <form action="" method="post" enctype="multipart/form-data">
         <input type="file" name="file">
         <input type="submit" value="Wyślij">

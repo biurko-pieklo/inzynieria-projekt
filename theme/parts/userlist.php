@@ -9,6 +9,9 @@ if (isset($_POST['download_json'])) {
 
 ?>
 
+<div class="module-toggle" data-module-toggle="module-userlist">
+    <b>JSON<b>
+</div>
 <div class="module" data-module="module-userlist">
     <form action="" method="POST">
         <input type="hidden" name="download_json">
