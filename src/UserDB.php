@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 CONST TABLE = 'users';
+CONST ADMIN_ID = 1;
 
 class UserDB {
     /**
      * Search database for user
-     * @param $conn - connection to database
      * @param $user - user object
      */
     private static function isExists(User $user): bool {
@@ -27,7 +27,6 @@ class UserDB {
 
     /**
      * Verify password
-     * @param $conn - connection to database
      * @param $user - user object
      */
     public static function verify(User $user): bool {
@@ -49,7 +48,6 @@ class UserDB {
 
     /**
      * Register new user
-     * @param $conn - connection to database
      * @param $user - user object
      */
     public static function register(User $user): RegisterCase {
@@ -73,8 +71,26 @@ class UserDB {
     }
 
     /**
+     * Remove user
+     * @param $id - id of user to be removed
+     */
+    public static function remove(int $id): bool {
+        if (UserDB::isAdmin($id)) {
+            return false;
+        }
+
+        $conn = Database::connect();
+        $sql = "DELETE FROM " . TABLE . " WHERE id=" . $id;
+
+        if ($conn->query($sql)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get all users
-     * @param $conn - connection to database
      */
     public static function getAll(): array|false {
         $conn = Database::connect();
@@ -92,7 +108,6 @@ class UserDB {
 
     /**
      * Print data of all users to json format
-     * @param $conn - connection to database
      */
     public static function printAllJSON(): string|false {
         $conn = Database::connect();
@@ -111,6 +126,26 @@ class UserDB {
         if ($result = $conn->query($sql)) {
             $value = $result->fetch_row()[0];
             return $value;
+        }
+    }
+
+    /**
+     * Check if id belongs to admin
+     */
+    public static function isAdmin(int $id): bool {
+        return $id == ADMIN_ID;
+    }
+
+    /**
+     * Check if current user is admin
+     */
+    public static function isCurrentUserAdmin(): bool {
+        $conn = Database::connect();
+        $sql = "SELECT id FROM " . TABLE . " WHERE name = '" . $_SESSION['user'] . "'";
+
+        if ($result = $conn->query($sql)) {
+            $value = $result->fetch_row()[0];
+            return $value == ADMIN_ID;
         }
     }
 }

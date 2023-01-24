@@ -6,6 +6,10 @@ if (isset($_POST['download_json'])) {
     }
 }
 
+if (isset($_POST['remove_user']) && isset($_POST['remove_id'])) {
+    UserDB::remove($_POST['remove_id']);
+}
+
 ?>
 
 <div class="module-toggle" data-module-toggle="module-userlist">

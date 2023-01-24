@@ -107,9 +107,28 @@ class User {
         if ($data) {
             echo '<table><tr><th>ID</th><th>Login</th><th>Display name</th></tr>';
             foreach ($data as $row) {
-                echo '<tr><td>' . $row['id'] . '</td><td>' . $row['name'] . '</td><td>' . $row['displayname'] . '</td></tr>';
+                $remove = '';
+                if (UserDB::isCurrentUserAdmin() && !UserDB::isAdmin((int) $row['id'])) {
+                    $remove .= '<td>';
+                    $remove .= self::userRemover((int) $row['id']);
+                    $remove .= '</td>';
+                }
+                echo '<tr><td>' . $row['id'] . '</td><td>' . $row['name'] . '</td><td>' . $row['displayname'] . '</td>' . $remove. '</tr>';
             }
+            echo '</table>';
         }
-        echo '</table>';
+    }
+
+    /**
+     * Print form for removing user
+     */
+    public static function userRemover(int $id): string {
+        return 
+            '<form action method="POST">
+                <input type="hidden" name="remove_user">
+                <input type="hidden" name="remove_id" value="'. $id . '">
+                <button type="submit">Usuń</button>
+            </form>'
+        ;
     }
 }
