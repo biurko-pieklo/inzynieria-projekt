@@ -3,7 +3,7 @@
 $conn = Database::connect();
 if (isset($_POST['download_json'])) {
     if(file_put_contents("./tmp/users.json", UserDB::printAllJSON($conn))) {
-        Utils::downloadFile("/tmp/users.json");
+        Utils::downloadFile("./tmp/users.json");
     }
 }
 
