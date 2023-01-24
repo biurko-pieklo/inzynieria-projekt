@@ -98,4 +98,18 @@ class User {
         unset($_SESSION['logged']);
         unset($_SESSION['user']);
     }
+
+    /**
+     * Print table of user data
+     */
+    public static function printAll(): void {
+        $data = UserDB::getAll();
+        if ($data) {
+            echo '<table><tr><th>ID</th><th>Login</th><th>Display name</th></tr>';
+            foreach ($data as $row) {
+                echo '<tr><td>' . $row['id'] . '</td><td>' . $row['name'] . '</td><td>' . $row['displayname'] . '</td></tr>';
+            }
+        }
+        echo '</table>';
+    }
 }
