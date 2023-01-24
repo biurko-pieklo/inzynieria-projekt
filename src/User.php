@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-CONST TABLE = 'users';
-
 class User {
     private string $login;
     private string $displayName;
@@ -24,6 +22,7 @@ class User {
 
     /**
      * Sets login of the user
+     * @param $login - user login
      */
     public function setLogin(string $login): void {
         $this->login = $login;
@@ -38,6 +37,7 @@ class User {
 
     /**
      * Sets name of the user
+     * @param $displayName - user display name
      */
     public function setDisplayName(string $displayName = ''): void {
         $this->displayName = $displayName != '' ? $displayName : $this->getLogin();
@@ -46,77 +46,58 @@ class User {
     /**
      * Returns password of the user
      */
-    private function getPassword(): string {
+    public function getPassword(): string {
         return $this->password;
     }
 
     /**
      * Sets name of the user
+     * @param $password - user password
      */
     private function setPassword(string $password): void {
         $this->password = $password;
     }
 
-    public function isExists($conn) {
-        $sql = "SELECT * FROM " . TABLE . " WHERE name = '" . $this->getLogin() . "'";
+    /**
+     * Register a new user
+     * @param $conn - connection to database
+     */
+    public function register(mysqli $conn): void {
+        $reg = UserDB::register($conn, $this);
 
-        if ($result = $conn->query($sql)) {
-            $row = $result->fetch_row();
-
-            if (!$row) {
-                return false;
-            }
-
-            return true;
+        switch ($reg) {
+            case RegisterCase::USER_EXISTS:
+                echo "Login '" . $_POST['reg_login'] . "' already taken. Please choose something else.";
+                break;
+            case RegisterCase::BAD_PASSWORD:
+                echo "Your password is not strong enough (at least 8 characters, one letter, one digit and one special)";
+                break;
+            case RegisterCase::ERROR:
+                echo "Sorry, someting went wrong";
+                break;
+            case RegisterCase::REGISTERED:
+                echo "Thank you for registering! You can now log into the system.";
+                break;
         }
-
     }
 
-    public function verify($conn) {
-        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $this->getLogin() . "'";
-
-        if ($result = $conn->query($sql)) {
-            $row = $result->fetch_row();
-
-            if (!$row) {
-                return false;
-            }
-
-            $value = $row[0];
+    /**
+     * Log the user in
+     * @param $conn - connection to database
+     */
+    public function login(mysqli $conn): void {
+        if (UserDB::verify($conn, $this)) {
+            $_SESSION['logged'] = true;
+            $_SESSION['user'] = $_POST['login'];
+            header('Location: .');
         }
-
-        return $this->password == $value;
     }
 
-    public function register($conn): RegisterCase {
-        if ($this->isExists($conn)) {
-            return RegisterCase::USER_EXISTS;
-        }
-
-        $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
-            VALUES ( '" . $this->getLogin() . "', '" . $this->getDisplayName() . "', '" . $this->getPassword() . "')";
-
-        if (Utils::passCheck($this->getPassword())){
-            if ($conn->query($sql) === TRUE) {
-                return RegisterCase::REGISTERED;
-            } else {
-                return RegisterCase::ERROR;
-            }
-        } 
-
-        return RegisterCase::BAD_PASSWORD;
-    }
-
-    public static function printAllJSON($conn) {
-        $sql = "SELECT * FROM " . TABLE;
-
-        if ($result = $conn->query($sql)) {
-            $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-            if (!$rows) {
-                return;
-            }
-            return json_encode($rows);
-        }
+    /**
+     * Log the user out
+     */
+    public static function logout(): void {
+        unset($_SESSION['logged']);
+        unset($_SESSION['user']);
     }
 }

@@ -9,19 +9,17 @@
 <?php
 $conn = Database::connect();
 
-if (isset($_POST['verify'])) {
-
-    Session::login($conn);
-
+if (isset($_POST['verify']) && Utils::verifyLoginPOST()) {
+    $user = new User($_POST['login'], $_POST['password']);
+    $user->login($conn);
 }
 if (isset($_POST['register'])) {
-
-    Session::register($conn);
-
+    $user = new User($_POST['reg_login'], $_POST['reg_password'], $_POST['reg_displayname']);
+    $user->register($conn);
 }
 if (isset($_POST['logout'])) {
 
-    Session::logout();
+    User::logout();
 
 }
 
@@ -57,7 +55,7 @@ die();
 ?>
 
     <div class="userdata">
-        <span><?php echo Session::getCurrentUserDisplayName($conn); ?></span>
+        <span><?php echo UserDB::getCurrentUserDisplayName($conn); ?></span>
         <form action="" method="POST">
             <input type="hidden" name="logout">
             <button type="submit">Logout</button>

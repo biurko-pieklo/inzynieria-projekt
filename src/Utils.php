@@ -51,7 +51,10 @@ class Utils {
         return true;
     }
 
-    public static function downloadFile($file): void {
+    /**
+     * Download file with given path
+     */
+    public static function downloadFile(string $file): void {
         if (file_exists($file)) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
@@ -63,6 +66,29 @@ class Utils {
             ob_clean();
             readfile($file);
             exit;
+        }
+    }
+
+    /**
+     * Check if login and password for logging in were provided
+     */
+    public static function verifyLoginPOST(): bool {
+        if (!isset($_POST['login']) || $_POST['login'] == '' || !isset($_POST['password']) || $_POST['password'] == '') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * Check if login and password for registering were provided
+     */
+    public static function verifyRegisterPOST(): bool {
+        if (!isset($_POST['reg_login']) || $_POST['reg_login'] == '' || !isset($_POST['reg_password']) || $_POST['reg_password'] == '') {
+            return false;
+        } else {
+            return true;
         }
     }
 }

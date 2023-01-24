@@ -12,6 +12,7 @@ class File {
 
     /**
      * Set filepath
+     * @param $path - path to file
      */
     public function setPath(string $path): void {
         $this->filepath = $path;
