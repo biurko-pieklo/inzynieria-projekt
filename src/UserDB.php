@@ -51,7 +51,7 @@ class UserDB {
      * @param $user - user object
      */
     public static function register(User $user): RegisterCase {
-        if (UserDB::isExists($user)) {
+        if (self::isExists($user)) {
             return RegisterCase::USER_EXISTS;
         }
 
@@ -75,7 +75,7 @@ class UserDB {
      * @param $id - id of user to be removed
      */
     public static function remove(int $id): bool {
-        if (UserDB::isAdmin($id)) {
+        if (self::isAdmin($id)) {
             return false;
         }
 
