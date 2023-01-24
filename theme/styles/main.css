@@ -18,7 +18,12 @@ a:visited {
 
 .userdata {
     position: fixed;
-    right: var(--global-margin);
+    top: 0;
+    right: 0;
+    padding: var(--global-margin);
+    background-color: #000;
+    border-bottom: 1px solid #fff;
+    border-left: 1px solid #fff;
 }
 
 .form {
