@@ -162,4 +162,39 @@ class UserDB {
             return $value == ADMIN_ID;
         }
     }
+
+    /**
+     * Get users password from DB
+     * @param $login - user login
+     */
+    public static function getPasswordByLogin(string $login): string|false {
+        $conn = Database::connect();
+        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $login . "'";
+
+        if ($result = $conn->query($sql)) {
+            $value = $result->fetch_row()[0];
+
+            if (!$value) {
+                return false;
+            }
+
+            return $value;
+        }
+    }
+
+    /**
+     * Save users password to DB
+     * @param $user - user object
+     * @param $displayname - user display name
+     */
+    public static function setDisplayName(User $user, string $displayname): bool {
+        $conn = Database::connect();
+        $sql = "UPDATE " . TABLE . " SET displayname = '" . $displayname . "' WHERE name = '" . $user->getLogin() . "'";
+
+        if ($result = $conn->query($sql)) {
+            return true;
+        }
+
+        return false;
+    }
 }
