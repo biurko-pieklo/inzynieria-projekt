@@ -10,7 +10,8 @@ class UserDB {
      * @param $conn - connection to database
      * @param $user - user object
      */
-    private static function isExists(mysqli $conn, User $user) {
+    private static function isExists(User $user): bool {
+        $conn = Database::connect();
         $sql = "SELECT * FROM " . TABLE . " WHERE name = '" . $user->getLogin() . "'";
 
         if ($result = $conn->query($sql)) {
@@ -29,7 +30,8 @@ class UserDB {
      * @param $conn - connection to database
      * @param $user - user object
      */
-    public static function verify(mysqli $conn, User $user) {
+    public static function verify(User $user): bool {
+        $conn = Database::connect();
         $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $user->getLogin() . "'";
 
         if ($result = $conn->query($sql)) {
@@ -50,11 +52,12 @@ class UserDB {
      * @param $conn - connection to database
      * @param $user - user object
      */
-    public static function register(mysqli $conn, User $user): RegisterCase {
-        if (UserDB::isExists($conn, $user)) {
+    public static function register(User $user): RegisterCase {
+        if (UserDB::isExists($user)) {
             return RegisterCase::USER_EXISTS;
         }
 
+        $conn = Database::connect();
         $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
             VALUES ( '" . $user->getLogin() . "', '" . $user->getDisplayName() . "', '" . $user->getPassword() . "')";
 
@@ -70,19 +73,30 @@ class UserDB {
     }
 
     /**
-     * Print data of all users to json format
+     * Get all users
      * @param $conn - connection to database
      */
-    public static function printAllJSON(mysqli $conn) {
+    public static function getAll(): array|false {
+        $conn = Database::connect();
         $sql = "SELECT * FROM " . TABLE;
 
         if ($result = $conn->query($sql)) {
             $rows = $result->fetch_all(MYSQLI_ASSOC);
 
             if (!$rows) {
-                return;
+                return false;
             }
-            return json_encode($rows);
+            return $rows;
+        }
+    }
+
+    /**
+     * Print data of all users to json format
+     * @param $conn - connection to database
+     */
+    public static function printAllJSON(): string|false {
+        $conn = Database::connect();
+        return json_encode(self::getAll($conn));
         }
     }
 
@@ -90,7 +104,8 @@ class UserDB {
      * Get display name of currently logged user
      * @param $conn - connection to database
      */
-    public static function getCurrentUserDisplayName(mysqli $conn): string {
+    public static function getCurrentUserDisplayName(): string {
+        $conn = Database::connect();
         $sql = "SELECT displayname FROM " . TABLE . " WHERE name = '" . $_SESSION['user'] . "'";
 
         if ($result = $conn->query($sql)) {

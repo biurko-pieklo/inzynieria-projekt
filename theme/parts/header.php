@@ -7,20 +7,17 @@
 </head>
 <body>
 <?php
-$conn = Database::connect();
 
 if (isset($_POST['verify']) && Utils::verifyLoginPOST()) {
     $user = new User($_POST['login'], $_POST['password']);
-    $user->login($conn);
+    $user->login();
 }
 if (isset($_POST['register'])) {
     $user = new User($_POST['reg_login'], $_POST['reg_password'], $_POST['reg_displayname']);
-    $user->register($conn);
+    $user->register();
 }
 if (isset($_POST['logout'])) {
-
     User::logout();
-
 }
 
 if (!Session::isLogged()) {
@@ -55,7 +52,7 @@ die();
 ?>
 
     <div class="userdata">
-        <span><?php echo UserDB::getCurrentUserDisplayName($conn); ?></span>
+        <span><?php echo UserDB::getCurrentUserDisplayName(); ?></span>
         <form action="" method="POST">
             <input type="hidden" name="logout">
             <button type="submit">Logout</button>

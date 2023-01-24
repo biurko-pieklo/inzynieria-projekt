@@ -60,10 +60,9 @@ class User {
 
     /**
      * Register a new user
-     * @param $conn - connection to database
      */
-    public function register(mysqli $conn): void {
-        $reg = UserDB::register($conn, $this);
+    public function register(): void {
+        $reg = UserDB::register($this);
 
         switch ($reg) {
             case RegisterCase::USER_EXISTS:
@@ -83,10 +82,9 @@ class User {
 
     /**
      * Log the user in
-     * @param $conn - connection to database
      */
-    public function login(mysqli $conn): void {
-        if (UserDB::verify($conn, $this)) {
+    public function login(): void {
+        if (UserDB::verify($this)) {
             $_SESSION['logged'] = true;
             $_SESSION['user'] = $_POST['login'];
             header('Location: .');
