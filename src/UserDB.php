@@ -112,12 +112,26 @@ class UserDB {
     public static function printAllJSON(): string|false {
         $conn = Database::connect();
         return json_encode(self::getAll($conn));
+    }
+
+    /**
+     * Register users based on json format
+     */
+    public static function registerFromJSON($json): void {
+        $conn = Database::connect();
+        $decoded = json_decode($json, true);
+        foreach ($decoded as $maybe_user) {
+            try {
+                $user = new User($maybe_user['name'], $maybe_user['password'], $maybe_user['displayname']);
+                $user->register();
+            } catch (Exception $e) {
+                error_log("User registration from JSON file failed");
+            }
         }
     }
 
     /**
      * Get display name of currently logged user
-     * @param $conn - connection to database
      */
     public static function getCurrentUserDisplayName(): string {
         $conn = Database::connect();

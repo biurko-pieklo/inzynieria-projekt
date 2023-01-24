@@ -66,16 +66,20 @@ class User {
 
         switch ($reg) {
             case RegisterCase::USER_EXISTS:
-                echo "Login '" . $_POST['reg_login'] . "' already taken. Please choose something else.";
+                echo "Login is already taken<br>";
+                error_log("Tried to add user with existing login");
                 break;
             case RegisterCase::BAD_PASSWORD:
-                echo "Your password is not strong enough (at least 8 characters, one letter, one digit and one special)";
+                echo "Password is not strong enough (at least 8 characters, one letter, one digit and one special)<br>";
+                error_log("Tried to add user with bad password");
                 break;
             case RegisterCase::ERROR:
-                echo "Sorry, someting went wrong";
+                echo "Sorry, someting went wrong<br>";
+                error_log("Something went wrong with registering");
                 break;
             case RegisterCase::REGISTERED:
-                echo "Thank you for registering! You can now log into the system.";
+                echo "Registered succesfully<br>";
+                error_log("Sussesful registration");
                 break;
         }
     }

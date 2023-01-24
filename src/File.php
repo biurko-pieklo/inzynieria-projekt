@@ -36,11 +36,14 @@ class File {
      * Saves file sent by POST
      * @param $file - file value ($_FILES['inputname'] variable)
      */
-    public function getFromPost(array $file) {
+    public function getFromPost(array $file, string $path = './uploads/') {
         try {
-            $upload = move_uploaded_file($file['tmp_name'], $this->savepath . $this->diffName($file['name'], 1));
-            echo "Wysłano plik";
-            return $upload;
+            $name = $this->diffName($file['name'], 1);
+            $upload = move_uploaded_file($file['tmp_name'], $path . $name);
+            if ($upload) {
+                echo "Wysłano plik";
+                return $name;
+            }
         } catch(Exception $e) {
             throw new Exception($e);
         }
