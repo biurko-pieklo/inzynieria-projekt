@@ -41,7 +41,7 @@ class File {
             $name = $this->diffName($file['name'], 1);
             $upload = move_uploaded_file($file['tmp_name'], $path . $name);
             if ($upload) {
-                echo "Wysłano plik";
+                echo "File sent";
                 return $name;
             }
         } catch(Exception $e) {
