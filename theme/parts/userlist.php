@@ -14,7 +14,6 @@ if (isset($_FILES['register_json'])) {
     $file = new File($_FILES['register_json']['name']);
     $name = $file->getFromPost($_FILES['register_json'], './tmp/');
     UserDB::registerFromJSON(file_get_contents("./tmp/" . $name));
-    header('Location: .');
 }
 
 
