@@ -2,10 +2,13 @@
 ini_set("log_errors", 1);
 ini_set("error_log", "/var/www/inzynieria-projekt/error.log");
 
+require './vendor/autoload.php';
+
 spl_autoload_register(function($class_name) {
     require('./src/' . $class_name . '.php');
 });
 
+DatabaseORM::setup();
 session_start();
 
 require_once('./theme/parts/header.php');

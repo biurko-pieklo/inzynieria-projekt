@@ -10,40 +10,19 @@ class UserDB {
      * Search database for user
      * @param $user - user object
      */
-    private static function isExists(User $user): bool {
-        $conn = Database::connect();
-        $sql = "SELECT * FROM " . TABLE . " WHERE name = '" . $user->getLogin() . "'";
-
-        if ($result = $conn->query($sql)) {
-            $row = $result->fetch_row();
-
-            if (!$row) {
-                return false;
-            }
-
-            return true;
-        }
+    private static function isExists(User $user) {
+        return self::getAllORM()->find('name', $user->getLogin());
     }
 
     /**
      * Verify password
      * @param $user - user object
      */
-    public static function verify(User $user): bool {
-        $conn = Database::connect();
-        $sql = "SELECT password FROM " . TABLE . " WHERE name = '" . $user->getLogin() . "'";
-
-        if ($result = $conn->query($sql)) {
-            $row = $result->fetch_row();
-
-            if (!$row) {
-                return false;
-            }
-
-            $value = $row[0];
-        }
-
-        return $user->getPassword() == $value;
+    public static function verify(User $user): bool|Object {
+        return DatabaseORM::all()
+            ->where('name', '=', $user->getLogin())
+            ->execute()
+            ->find('password', $user->getPassword());
     }
 
     /**
@@ -54,13 +33,17 @@ class UserDB {
         if (self::isExists($user)) {
             return RegisterCase::USER_EXISTS;
         }
-
-        $conn = Database::connect();
-        $sql = "INSERT INTO " . TABLE . "(name, displayname, password) 
-            VALUES ( '" . $user->getLogin() . "', '" . $user->getDisplayName() . "', '" . $user->getPassword() . "')";
-
+    
+        $insert = [
+            'name' => $user->getLogin(),
+            'displayname' => $user->getDisplayName(),
+            'password' => $user->getPassword(),
+        ];
+        
         if (Utils::passCheck($user->getPassword())){
-            if ($conn->query($sql) === TRUE) {
+            if (DatabaseORM::query()
+                    ->insert($insert)
+                    ->execute() === true) {
                 return RegisterCase::REGISTERED;
             } else {
                 return RegisterCase::ERROR;
@@ -79,10 +62,10 @@ class UserDB {
             return false;
         }
 
-        $conn = Database::connect();
-        $sql = "DELETE FROM " . TABLE . " WHERE id=" . $id;
-
-        if ($conn->query($sql)) {
+        if (DatabaseORM::query()
+                ->delete()
+                ->where('id', '=', $id)
+                ->execute()) {
             return true;
         }
 
@@ -196,5 +179,9 @@ class UserDB {
         }
 
         return false;
+    }
+
+    public static function getAllORM() {
+        return DatabaseORM::all()->execute()->loop();
     }
 }
